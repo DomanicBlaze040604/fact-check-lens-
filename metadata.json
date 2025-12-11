@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Instant Fact-Check Lens",
+  "description": "A high-precision, multimodal fact verification tool powered by Gemini. Upload images or text to extract claims, verify against credible sources, and receive calibrated verdicts.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
