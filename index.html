@@ -15,23 +15,62 @@
               serif: ['Merriweather', 'serif'],
             },
             colors: {
-              verdict: {
-                true: '#10b981',
-                false: '#ef4444',
-                misleading: '#f59e0b',
-                context: '#8b5cf6',
-                unknown: '#6b7280',
-                ai: '#ec4899'
-              }
+              brand: {
+                green: 'rgb(var(--brand-green) / <alpha-value>)',
+                yellow: 'rgb(var(--brand-yellow) / <alpha-value>)',
+                red: 'rgb(var(--brand-red) / <alpha-value>)',
+                dark: 'rgb(var(--brand-dark) / <alpha-value>)',
+                light: 'rgb(var(--brand-light) / <alpha-value>)',
+              },
             }
           },
         },
       }
     </script>
     <style>
+      :root {
+        /* Default: Rasta/Traffic (Green/Yellow/Red) */
+        --brand-green: 16 185 129;   /* #10B981 */
+        --brand-yellow: 245 158 11;  /* #F59E0B */
+        --brand-red: 239 68 68;      /* #EF4444 */
+        --brand-dark: 6 78 59;       /* #064E3B */
+        --brand-light: 236 253 245;  /* #ECFDF5 */
+        --bg-base: 254 252 232;      /* #FEFCE8 */
+        --bg-gradient: 240 253 244;  /* #F0FDF4 */
+      }
+
+      [data-theme='ocean'] {
+        /* Professional Blue/Teal */
+        --brand-green: 37 99 235;    /* Blue-600 */
+        --brand-yellow: 14 165 233;  /* Sky-500 */
+        --brand-red: 239 68 68;      /* Red-500 */
+        --brand-dark: 15 23 42;      /* Slate-900 */
+        --brand-light: 239 246 255;  /* Blue-50 */
+        --bg-base: 248 250 252;      /* Slate-50 */
+        --bg-gradient: 224 242 254;  /* Sky-100 */
+      }
+
+      [data-theme='royal'] {
+        /* Vibrant Purple/Pink */
+        --brand-green: 147 51 234;   /* Purple-600 */
+        --brand-yellow: 236 72 153;  /* Pink-500 */
+        --brand-red: 225 29 72;      /* Rose-600 */
+        --brand-dark: 88 28 135;     /* Purple-900 */
+        --brand-light: 250 245 255;  /* Purple-50 */
+        --bg-base: 255 241 242;      /* Rose-50 */
+        --bg-gradient: 253 242 248;  /* Pink-50 */
+      }
+
       body {
-        background-color: #f8fafc;
+        background-color: rgb(var(--bg-base));
+        background-image: linear-gradient(to bottom right, rgb(var(--bg-base)), rgb(var(--bg-gradient)));
         color: #1e293b;
+        transition: background-color 0.5s ease, color 0.5s ease;
+      }
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
       }
     </style>
   <script type="importmap">
@@ -43,7 +82,9 @@
     "lucide-react": "https://esm.sh/lucide-react@^0.560.0",
     "recharts": "https://esm.sh/recharts@^3.5.1",
     "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
-    "clsx": "https://esm.sh/clsx@^2.1.1"
+    "clsx": "https://esm.sh/clsx@^2.1.1",
+    "pdfjs-dist": "https://esm.sh/pdfjs-dist@3.11.174",
+    "jspdf": "https://esm.sh/jspdf@2.5.1"
   }
 }
 </script>

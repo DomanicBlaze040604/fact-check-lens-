@@ -14,7 +14,9 @@
     "lucide-react": "^0.560.0",
     "recharts": "^3.5.1",
     "@google/genai": "^1.33.0",
-    "clsx": "^2.1.1"
+    "clsx": "^2.1.1",
+    "pdfjs-dist": "3.11.174",
+    "jspdf": "2.5.1"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

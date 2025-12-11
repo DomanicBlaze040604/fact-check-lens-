@@ -25,11 +25,17 @@ const getAiClient = (): GoogleGenAI => {
   return aiClient;
 };
 
-export const analyzeContent = async (text: string, imageBase64?: string): Promise<FactCheckResponse> => {
+export const analyzeContent = async (text: string, imageBase64?: string, mode: 'standard' | 'deep' = 'standard'): Promise<FactCheckResponse> => {
   try {
     const ai = getAiClient();
     const parts: any[] = [];
     
+    // Construct the prompt based on mode
+    let promptPrefix = "";
+    if (mode === 'deep') {
+      promptPrefix = "CONDUCT A DEEP DIVE ANALYSIS. Search extensively for historical context, scientific consensus, and multiple viewpoints. Be extremely rigorous with evidence selection. ";
+    }
+
     if (imageBase64) {
       parts.push({
         inlineData: {
@@ -38,20 +44,22 @@ export const analyzeContent = async (text: string, imageBase64?: string): Promis
         },
       });
       parts.push({
-        text: `Analyze this image. ${text ? 'Context: ' + text : ''}`
+        text: `${promptPrefix}Analyze this image. ${text ? 'Context: ' + text : ''}`
       });
     } else {
       // Check if text looks like a URL for specific instruction
       const isUrl = /^(http|https):\/\/[^ "]+$/.test(text.trim());
       if (isUrl) {
-         parts.push({ text: `Analyze the content at this URL: ${text}. Extract claims and verify them.` });
+         parts.push({ text: `${promptPrefix}Analyze the content at this URL: ${text}. Extract claims and verify them.` });
       } else {
-         parts.push({ text: text });
+         parts.push({ text: `${promptPrefix}${text}` });
       }
     }
 
-    // Using gemini-3-pro-preview for complex reasoning and tool use
-    const modelId = 'gemini-3-pro-preview';
+    // SPEED OPTIMIZATION:
+    // Use 'gemini-2.5-flash' for standard requests -> Very Fast.
+    // Use 'gemini-3-pro-preview' for deep requests -> High Intelligence.
+    const modelId = mode === 'deep' ? 'gemini-3-pro-preview' : 'gemini-2.5-flash';
 
     // NOTE: When using googleSearch tool, we CANNOT use responseMimeType: 'application/json' or responseSchema.
     // We rely on the system instruction to force JSON format.
@@ -61,6 +69,7 @@ export const analyzeContent = async (text: string, imageBase64?: string): Promis
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
         tools: [{ googleSearch: {} }],
+        // Flash models handle JSON instructions very well even without schema enforcement if prompted correctly
       },
     });
 
